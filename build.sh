@@ -5,8 +5,8 @@ trap "exit" SIGINT
 
 if ! docker version &> /dev/null
 then
-    echo "Docker daemon is not running or you have unsufficient permissions!"
-    exit -1
+	echo "Docker daemon is not running or you have unsufficient permissions!"
+	exit -1
 fi
 
 WORK_DIR="${0%/*}"
