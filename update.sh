@@ -27,13 +27,14 @@ cd "$WORK_DIR"
 CURRENT_VERSION=$(git describe --tags --abbrev=0)
 NEXT_VERSION="$CURRENT_VERSION"
 
-# Alpine
-CURRENT_ALPINE_VERSION=$(cat Dockerfile | grep "FROM alpine:")
-CURRENT_ALPINE_VERSION="${CURRENT_ALPINE_VERSION#*:}"
-ALPINE_VERSION=$(curl -L -s 'https://registry.hub.docker.com/v2/repositories/library/alpine/tags' | jq '."results"[]["name"]' | grep -m 1 -P -o "(\d+\.)+\d+")
-if [ "$CURRENT_ALPINE_VERSION" != "$ALPINE_VERSION" ]
+# Base Image
+IMAGE_NAME="alpine"
+CURRENT_IMAGE_VERSION=$(cat Dockerfile | grep "FROM $IMAGE_NAME:")
+CURRENT_IMAGE_VERSION="${CURRENT_IMAGE_VERSION#*:}"
+IMAGE_VERSION=$(curl -L -s "https://registry.hub.docker.com/v2/repositories/library/$IMAGE_NAME/tags" | jq '."results"[]["name"]' | grep -m 1 -P -o "(\d+\.)+\d+")
+if [ "$CURRENT_IMAGE_VERSION" != "$IMAGE_VERSION" ]
 then
-	echo "Alpine $ALPINE_VERSION available!"
+	echo "Alpine $IMAGE_VERSION available!"
 
 	RELEASE="${CURRENT_VERSION#*-}"
 	NEXT_VERSION="${CURRENT_VERSION%-*}-$((RELEASE+1))"
@@ -43,7 +44,7 @@ fi
 NGINX_PKG="nginx"
 CURRENT_NGINX_VERSION=$(cat Dockerfile | grep "$NGINX_PKG=")
 CURRENT_NGINX_VERSION="${CURRENT_NGINX_VERSION#*=}"
-NGINX_VERSION=$(curl -L -s "https://pkgs.alpinelinux.org/package/v${ALPINE_VERSION%.*}/main/x86_64/$NGINX_PKG" | grep -m 1 -P -o "(\d+\.)+\d+-r\d+" )
+NGINX_VERSION=$(curl -L -s "https://pkgs.alpinelinux.org/package/v${IMAGE_VERSION%.*}/main/x86_64/$NGINX_PKG" | grep -m 1 -P -o "(\d+\.)+\d+-r\d+")
 if [ "$CURRENT_NGINX_VERSION" != "$NGINX_VERSION" ]
 then
 	echo "NGINX $NGINX_VERSION available!"
@@ -61,12 +62,18 @@ if [ "$CURRENT_VERSION" == "$NEXT_VERSION" ]
 then
 	echo "No updates available."
 else
-	read -p "Save changes? [y/n]" -n 1 -r && echo
-	if [[ $REPLY =~ ^[Yy]$ ]]
+	if [ "$1" == "--noconfirm" ]
+	then
+		SAVE="y"
+	else
+		read -p "Save changes? [y/n]" -n 1 -r SAVE && echo
+	fi
+	
+	if [[ $SAVE =~ ^[Yy]$ ]]
 	then
 		if [ "$CURRENT_ALPINE_VERSION" != "$ALPINE_VERSION" ]
 		then
-			sed -i "s|FROM alpine:.*|FROM alpine:$ALPINE_VERSION|" Dockerfile
+			sed -i "s|FROM $IMAGE_NAME:.*|FROM $IMAGE_NAME:$ALPINE_VERSION|" Dockerfile
 		fi
 
 		if [ "$CURRENT_NGINX_VERSION" != "$NGINX_VERSION" ]
@@ -74,8 +81,14 @@ else
 			sed -i "s|$NGINX_PKG=.*|$NGINX_PKG=$NGINX_VERSION|" Dockerfile
 		fi
 
-		read -p "Commit changes? [y/n]" -n 1 -r && echo
-		if [[ $REPLY =~ ^[Yy]$ ]]
+		if [ "$1" == "--noconfirm" ]
+		then
+			COMMIT="y"
+		else
+			read -p "Commit changes? [y/n]" -n 1 -r COMMIT && echo
+		fi
+
+		if [[ $COMMIT =~ ^[Yy]$ ]]
 		then
 			git add Dockerfile
 			git commit -m "Version bump to $NEXT_VERSION"
