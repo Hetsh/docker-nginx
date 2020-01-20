@@ -53,5 +53,6 @@ then
 	--publish 443:443/tcp \
 	--mount type=bind,source="$TMP_DIR",target="/etc/nginx/conf.d" \
 	--mount type=bind,source="$TMP_DIR/index.html",target="/srv/index.html" \
+	--name "$APP_NAME" \
 	"$APP_NAME"
 fi
