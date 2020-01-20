@@ -71,9 +71,9 @@ else
 	
 	if [[ $SAVE =~ ^[Yy]$ ]]
 	then
-		if [ "$CURRENT_ALPINE_VERSION" != "$ALPINE_VERSION" ]
+		if [ "$CURRENT_IMAGE_VERSION" != "$IMAGE_VERSION" ]
 		then
-			sed -i "s|FROM $IMAGE_NAME:.*|FROM $IMAGE_NAME:$ALPINE_VERSION|" Dockerfile
+			sed -i "s|FROM $IMAGE_NAME:.*|FROM $IMAGE_NAME:$IMAGE_VERSION|" Dockerfile
 		fi
 
 		if [ "$CURRENT_NGINX_VERSION" != "$NGINX_VERSION" ]
