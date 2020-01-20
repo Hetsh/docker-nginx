@@ -1,4 +1,4 @@
-FROM alpine:3.11.2
+FROM alpine:3.11.3
 RUN apk add --no-cache nginx=1.16.1-r6
 
 VOLUME ["/etc/nginx/conf.d"]
