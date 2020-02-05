@@ -43,7 +43,7 @@ if [ "$CURRENT_NGINX_VERSION" != "$NGINX_VERSION" ]; then
 
 	# Dont update version if only release counter changed
 	if [ "${CURRENT_NGINX_VERSION%-*}" != "${NGINX_VERSION%-*}" ]; then
-		update_version ${NGINX_VERSION%-*}
+		update_version "${NGINX_VERSION%-*}"
 	else
 		update_release
 	fi
@@ -56,12 +56,11 @@ fi
 
 if [ "${1+}" = "--noconfirm" ] || confirm_action "Save changes?"; then
 	if [ "$CURRENT_IMAGE_VERSION" != "$IMAGE_VERSION" ]; then
-		sed -i "s|FROM $IMAGE_PKG:$IMAGE_REGEX|FROM $IMAGE_PKG:$IMAGE_VERSION|" Dockerfile
+		sed -i "s|FROM $IMAGE_PKG:$CURRENT_IMAGE_VERSION|FROM $IMAGE_PKG:$IMAGE_VERSION|" Dockerfile
 		CHANGELOG+="$IMAGE_NAME $CURRENT_IMAGE_VERSION -> $IMAGE_VERSION, "
 	fi
-
 	if [ "$CURRENT_NGINX_VERSION" != "$NGINX_VERSION" ]; then
-		sed -i "s|$NGINX_PKG=$NGINX_REGEX|$NGINX_PKG=$NGINX_VERSION|" Dockerfile
+		sed -i "s|$NGINX_PKG=$CURRENT_NGINX_VERSION|$NGINX_PKG=$NGINX_VERSION|" Dockerfile
 		CHANGELOG+="$NGINX_NAME $CURRENT_NGINX_VERSION -> $NGINX_VERSION, "
 	fi
 	CHANGELOG="${CHANGELOG%,*}"
