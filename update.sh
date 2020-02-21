@@ -16,11 +16,11 @@ source libs/docker.sh
 assert_dependency "jq"
 assert_dependency "curl"
 
-# Alpine Linux
-update_image "library/alpine" "Alpine" "(\d+\.)+\d+"
+# Base image
+update_image "library/alpine" "Alpine" "\d{8}"
 
 # NGINX
-update_pkg "nginx" "NGINX" "true" "https://pkgs.alpinelinux.org/package/v${_NEW_IMG_VERSION%.*}/main/x86_64" "(\d+\.)+\d+-r\d+"
+update_pkg "nginx" "NGINX" "true" "https://pkgs.alpinelinux.org/package/edge/main/x86_64" "(\d+\.)+\d+-r\d+"
 
 if ! updates_available; then
 	echo "No updates available."

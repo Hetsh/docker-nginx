@@ -1,6 +1,6 @@
-FROM library/alpine:3.11.3
+FROM library/alpine:20200122
 RUN apk add --no-cache \
-    nginx=1.16.1-r6
+    nginx=1.16.1-r8
 
 VOLUME ["/etc/nginx/conf.d"]
 EXPOSE 80/tcp 443/tcp
