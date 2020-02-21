@@ -1,4 +1,4 @@
-FROM alpine:3.11.3
+FROM library/alpine:3.11.3
 RUN apk add --no-cache \
     nginx=1.16.1-r6
 

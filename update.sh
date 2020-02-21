@@ -2,7 +2,7 @@
 
 
 # Abort on any error
-set -eu
+set -e -u
 
 # Simpler git usage, relative file paths
 CWD=$(dirname "$0")
@@ -16,14 +16,11 @@ source libs/docker.sh
 assert_dependency "jq"
 assert_dependency "curl"
 
-# Current version of docker image
-register_current_version
-
 # Alpine Linux
-update_image "alpine" "Alpine" "x86_64" "(\d+\.)+\d+"
+update_image "library/alpine" "Alpine" "(\d+\.)+\d+"
 
 # NGINX
-update_alpine_pkg "nginx" "NGINX" "true" "main" "(\d+\.)+\d+-r\d+"
+update_pkg "nginx" "NGINX" "true" "https://pkgs.alpinelinux.org/package/v${_NEW_IMG_VERSION%.*}/main/x86_64" "(\d+\.)+\d+-r\d+"
 
 if ! updates_available; then
 	echo "No updates available."
