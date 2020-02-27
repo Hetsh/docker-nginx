@@ -7,8 +7,9 @@ ARG APP_USER="http"
 ARG	APP_UID=33
 ARG APP_GROUP="http"
 ARG	APP_GID=33
-RUN sed -i "s|nginx:x:100:101|$APP_USER:x:$APP_UID:$APP_GID|" /etc/passwd && \
-    sed -i "s|nginx:x:101|$APP_GROUP:x:$APP_GID|" /etc/group
+RUN sed -i "/:$APP_UID/d" /etc/passwd /etc/group && \
+    sed -i "s|nginx:x:100:101|$APP_USER:x:$APP_UID:$APP_GID|" /etc/passwd && \
+    sed -i "s|nginx:x:101:nginx|$APP_GROUP:x:$APP_GID:$APP_USER|" /etc/group
 
 # Volumes
 ARG CONF_DIR="/etc/nginx/conf.d"
