@@ -18,14 +18,11 @@ RUN chown -R "$APP_USER":"$APP_GROUP" "$CONF_DIR" "$SRV_DIR" "$LOG_DIR"
 VOLUME ["$CONF_DIR", "$SRV_DIR", "$LOG_DIR"]
 
 # Configuration
-ARG RUN_DIR="/run/nginx"
-RUN mkdir "$RUN_DIR" && \
-    ln -s "$LOG_DIR" "$APP_DIR/logs" && \
-    sed -i "s|user nginx|user $APP_USER|" /etc/nginx/nginx.conf && \
-    chown -R "$APP_USER":"$APP_GROUP" "$RUN_DIR"
+RUN ln -s "$LOG_DIR" "$APP_DIR/logs" && \
+    sed -i "s|user nginx|user $APP_USER|" /etc/nginx/nginx.conf
 
 #      HTTP   HTTPS
 EXPOSE 80/tcp 443/tcp
 
 WORKDIR "$SRV_DIR"
-ENTRYPOINT exec nginx -g 'daemon off; error_log stderr info;'
+ENTRYPOINT exec nginx -g 'daemon off; error_log stderr info; pid none;'
