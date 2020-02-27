@@ -1,0 +1,21 @@
+[Unit]
+Description=NGINX Container
+After=docker.service
+Requires=docker.service
+
+[Service]
+ExecStartPre=-/bin/docker create \
+              --rm \
+              --interactive \
+              --name nginx \
+              --publish 80:80 \
+              --publish 443:443 \
+              --mount type=bind,source=/etc/nginx/sites,target=/etc/nginx/conf.d \
+              --mount type=bind,source=/srv,target=/srv \
+              --mount type=bind,source=/etc/localtime,target=/etc/localtime,readonly \
+              hetsh/nginx
+ExecStart=/bin/docker start --attach nginx
+ExecStop=/bin/docker stop nginx
+
+[Install]
+WantedBy=multi-user.target
