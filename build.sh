@@ -49,18 +49,20 @@ if confirm_action "Test image?"; then
 </html>" > "$TMP_DIR/index.html"
 
 	# Apply permissions, UID & GID matches process user
-	APP_UID=100
-	APP_GID=101
+	extract_var APP_UID "./Dockerfile" "\K\d+"
+	extract_var APP_GID "./Dockerfile" "\K\d+"
 	chown -R "$APP_UID":"$APP_GID" "$TMP_DIR"
 
 	# Start the test
+	extract_var CONF_DIR "./Dockerfile" "\"\K[^\"]+"
+	extract_var SRV_DIR "./Dockerfile" "\"\K[^\"]+"
 	docker run \
 	--rm \
 	--interactive \
 	--publish 80:80/tcp \
 	--publish 443:443/tcp \
-	--mount type=bind,source="$TMP_DIR",target="/etc/nginx/conf.d" \
-	--mount type=bind,source="$TMP_DIR/index.html",target="/srv/index.html" \
+	--mount type=bind,source="$TMP_DIR",target="$CONF_DIR" \
+	--mount type=bind,source="$TMP_DIR/index.html",target="$SRV_DIR/index.html" \
 	--name "$APP_NAME" \
 	"$APP_NAME"
 fi
