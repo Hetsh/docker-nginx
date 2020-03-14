@@ -54,14 +54,14 @@ if confirm_action "Test image?"; then
 	chown -R "$APP_UID":"$APP_GID" "$TMP_DIR"
 
 	# Start the test
-	extract_var CONF_DIR "./Dockerfile" "\"\K[^\"]+"
+	extract_var HOSTS_DIR "./Dockerfile" "\"\K[^\"]+"
 	extract_var SRV_DIR "./Dockerfile" "\"\K[^\"]+"
 	docker run \
 	--rm \
 	--interactive \
 	--publish 80:80/tcp \
 	--publish 443:443/tcp \
-	--mount type=bind,source="$TMP_DIR",target="$CONF_DIR" \
+	--mount type=bind,source="$TMP_DIR",target="$HOSTS_DIR" \
 	--mount type=bind,source="$TMP_DIR/index.html",target="$SRV_DIR/index.html" \
 	--name "$APP_NAME" \
 	"$APP_NAME"
