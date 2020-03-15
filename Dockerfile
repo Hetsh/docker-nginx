@@ -29,8 +29,8 @@ ARG RUN_DIR="/run/nginx"
 RUN ln -s "$LOG_DIR" "$APP_DIR/logs" && \
     mkdir "$RUN_DIR" && \
     chown -R "$APP_USER":"$APP_GROUP" "$RUN_DIR" && \
-    sed -i "s|user nginx|user $APP_USER|" /etc/nginx/nginx.conf && \
-    sed -i "s|group nginx|group $APP_GROUP|" /etc/nginx/nginx.conf
+    sed -i "s|user $OLD_USER|user $APP_USER|" /etc/nginx/nginx.conf && \
+    sed -i "s|group $OLD_GROUP|group $APP_GROUP|" /etc/nginx/nginx.conf
 
 #      HTTP   HTTPS
 EXPOSE 80/tcp 443/tcp
