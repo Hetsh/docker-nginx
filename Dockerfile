@@ -1,4 +1,4 @@
-FROM library/alpine:20200122
+FROM library/alpine:20200319
 RUN apk add --no-cache \
     nginx=1.16.1-r8
 
