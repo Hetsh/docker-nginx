@@ -19,11 +19,14 @@ RUN sed -i "/:$APP_UID/d" /etc/passwd && \
 # Volumes
 ARG MODULE_DIR="/etc/nginx/modules"
 ARG HOSTS_DIR="/etc/nginx/conf.d"
+ARG CERT_DIR="/etc/certs"
+ARG SOCK_DIR="/run/socks"
 ARG SRV_DIR="/srv"
 ARG LOG_DIR="/var/log/nginx"
-RUN rm "$HOSTS_DIR/default.conf" && \
-    chown -R "$APP_USER":"$APP_GROUP" "$HOSTS_DIR" "$SRV_DIR" "$LOG_DIR"
-VOLUME ["$MODULE_DIR", "$HOSTS_DIR", "$SRV_DIR", "$LOG_DIR"]
+RUN mkdir "$CERT_DIR" "$SOCK_DIR" && \
+    rm "$HOSTS_DIR/default.conf" && \
+    chown -R "$APP_USER":"$APP_GROUP" "$MODULE_DIR" "$HOSTS_DIR" "$CERT_DIR" "$SOCK_DIR" "$SRV_DIR" "$LOG_DIR"
+VOLUME ["$MODULE_DIR", "$HOSTS_DIR", "$CERT_DIR", "$SOCK_DIR", "$SRV_DIR", "$LOG_DIR"]
 
 # Configuration
 ARG RUN_DIR="/run/nginx"
