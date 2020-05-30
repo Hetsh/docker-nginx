@@ -17,12 +17,13 @@ RUN sed -i "/:$APP_UID/d" /etc/passwd && \
     sed -i "s|$OLD_GROUP:x:$OLD_GID:$OLD_USER|$APP_GROUP:x:$APP_GID:|" /etc/group
 
 # Volumes
-ARG CONF_DIR="/etc/nginx/modules"
+ARG MODULE_DIR="/etc/nginx/modules"
 ARG HOSTS_DIR="/etc/nginx/conf.d"
 ARG SRV_DIR="/srv"
 ARG LOG_DIR="/var/log/nginx"
-RUN chown -R "$APP_USER":"$APP_GROUP" "$HOSTS_DIR" "$SRV_DIR" "$LOG_DIR"
-VOLUME ["$CONF_DIR", "$HOSTS_DIR", "$SRV_DIR", "$LOG_DIR"]
+RUN rm "$HOSTS_DIR/default.conf" && \
+    chown -R "$APP_USER":"$APP_GROUP" "$HOSTS_DIR" "$SRV_DIR" "$LOG_DIR"
+VOLUME ["$MODULE_DIR", "$HOSTS_DIR", "$SRV_DIR", "$LOG_DIR"]
 
 # Configuration
 ARG RUN_DIR="/run/nginx"
