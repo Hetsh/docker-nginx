@@ -9,7 +9,7 @@ ExecStartPre=-/bin/docker create \
               --interactive \
               --publish 80:80/tcp \
               --publish 443:443/tcp \
-              --mount type=bind,source=/etc/nginx/sites,target=/etc/nginx/conf.d \
+              --mount type=bind,source=/etc/nginx/conf.d,target=/etc/nginx/conf.d,readonly \
               --mount type=bind,source=/srv,target=/srv \
               --mount type=bind,source=/etc/localtime,target=/etc/localtime,readonly \
               --name nginx \
