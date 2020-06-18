@@ -1,6 +1,6 @@
 FROM library/alpine:20200428
 RUN apk add --no-cache \
-    nginx=1.18.0-r0
+    nginx=1.18.0-r1
 
 # App user
 ARG OLD_USER="nginx"
