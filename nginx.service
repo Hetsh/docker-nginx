@@ -6,7 +6,6 @@ Requires=docker.service
 [Service]
 ExecStartPre=-/bin/docker create \
               --rm \
-              --interactive \
               --publish 80:80/tcp \
               --publish 443:443/tcp \
               --mount type=bind,source=/etc/nginx/conf.d,target=/etc/nginx/conf.d,readonly \
