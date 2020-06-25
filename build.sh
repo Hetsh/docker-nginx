@@ -60,6 +60,7 @@ if confirm_action "Test image?"; then
 	extract_var LOG_DIR "./Dockerfile" "\"\K[^\"]+"
 	docker run \
 	--rm \
+	--tty \
 	--interactive \
 	--publish 80:80/tcp \
 	--publish 443:443/tcp \
