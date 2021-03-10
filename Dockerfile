@@ -26,7 +26,7 @@ RUN sed -i "s|^user $OLD_USER|user $APP_USER|" "$NGINX_CONF" && \
 ARG CERT_DIR="/etc/certs"
 ARG RUN_DIR="/run/nginx"
 ARG LOG_DIR="/var/log/nginx"
-RUN mkdir "$CERT_DIR" "$RUN_DIR" && \
+RUN mkdir "$CERT_DIR" && \
     chown -R "$APP_USER":"$APP_GROUP" "$CERT_DIR" "$RUN_DIR" "$LOG_DIR"
 VOLUME ["$CERT_DIR", "$RUN_DIR", "$LOG_DIR", "$SRV_DIR", "$HOST_DIR"]
 
