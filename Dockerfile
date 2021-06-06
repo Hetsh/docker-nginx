@@ -16,7 +16,7 @@ RUN sed -i "/:$APP_UID/d" /etc/passwd && \
 
 # Configuration
 ARG SRV_DIR="/srv"
-ARG HOST_DIR="/etc/nginx/conf.d"
+ARG HOST_DIR="/etc/nginx/http.d"
 ARG NGINX_CONF="/etc/nginx/nginx.conf"
 RUN sed -i "s|^user $OLD_USER|user $APP_USER|" "$NGINX_CONF" && \
     sed -i "s|^group $OLD_GROUP|group $APP_GROUP|" "$NGINX_CONF" && \

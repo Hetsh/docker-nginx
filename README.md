@@ -12,10 +12,10 @@ docker stop nginx
 ```
 
 ## Configuration
-The default nginx config includes all config files from `/etc/nginx/conf.d` that end with `.conf`.
+The default nginx config includes all config files from `/etc/nginx/http.d` that end with `.conf`.
 The config volume can be mounted read only:
 ```bash
---mount type=bind,readonly,source="/path/to/hosts",target="/etc/nginx/conf.d"
+--mount type=bind,readonly,source="/path/to/hosts",target="/etc/nginx/http.d"
 ```
 To provide a custom nginx config override the default one:
 ```bash
