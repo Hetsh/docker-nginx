@@ -1,6 +1,6 @@
 FROM amd64/alpine:20210804
 RUN apk add --no-cache \
-        nginx=1.20.1-r8
+        nginx=1.20.1-r9
 
 # App user
 ARG OLD_USER="nginx"
