@@ -1,4 +1,4 @@
-FROM amd64/alpine:20220715
+FROM amd64/alpine:20221110
 RUN apk add --no-cache \
         nginx=1.22.1-r0
 
